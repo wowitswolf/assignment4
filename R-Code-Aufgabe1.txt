@@ -1,0 +1,14 @@
+# The next two lines install the package - only necessary the first time  
+source("https://bioconductor.org/biocLite.R") 
+biocLite("rGADEM") 
+
+#Load package 
+library("rGADEM") 
+pwd <- ""  #"pwd"gibt Namen des aktuellen Verzeichnisses aus.Hier auf leer gesetzt. mehr zu pwd:(https://www.rdocumentation.org/packages/pracma/versions/1.9.9/topics/cd%2C%20pwd%2C%20what)
+path<- system.file("extdata/Test_100.fasta", package="rGADEM") #"path" wird definiert als dieses Package "rGADEM"
+FastaFile <- paste(pwd, path, sep="") #FastaFile wird definiert als eine Tabelle, deren Inhalte dann mit Punkten getrennt sind. Die Inhalte der Tabelle müssen nach "Paste()" in die Klammer. Mehr zu Paste: ( https://www.rdocumentation.org/packages/tables/versions/0.8.8/topics/Paste )
+sequences <- readDNAStringSet(FastaFile, "fasta") #als "sequences" wird das FastaFile definiert. Speziell: "fasta"
+gadem <- GADEM(sequences, verbose=1) #""gadem" wird definiert aus dem Package GADEM mit den sequences und "verbose=1"...(GADEM ist Teilprogramm in C)
+consensus(gadem) #mehr zu "consensus": https://www.rdocumentation.org/packages/agricolae/versions/1.3-1/topics/consensus
+pwm <- gadem@motifList[[1]]@pwm #pwm wird definiert aus dem gadem package mit dem Listeninhalt von "1"   
+seqLogo(pwm) #"zeichnet" das Sequenzen Log. in diesem Fall präsentiert es eine "Position Weight Matrix" (PWM)
